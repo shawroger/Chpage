@@ -44,6 +44,52 @@ Then,you can use **my.match()** to load them in the Chpage page list.
 
 ``` javascript
 my.match('.c-page');
-
 console.log(my.list); //view all the node list
 ```
+There are some methods to change pages.
+``` javascript
+my.move('+') //pagedown
+my.move('-') //pageup
+my.goto(0) //go to the firt page
+my.goto(n) //go to the n.th page
+my.goEnd(n) //go to the last page
+```
+you need not worry about turning the page excessively，**Chpage** has already control it from 0 to the last page.
+
+## Get the page change method
+
+Using bootstrap UI,we can make a pagination and give them a class style.
+``` html
+/* use 'c-list' as an example*/
+<ul class="pagination">
+	<li id="first"><a href="javascript:;">First</a></li>
+	<li id="back"><a href="javascript:;">&laquo;</a></li>
+	<li class="c-list"><a href="javascript:;">1</a></li>
+	<li class="c-list"><a href="javascript:;">2</a></li>
+	<li class="c-list"><a href="javascript:;">3</a></li>
+	<li class="c-list"><a href="javascript:;">4</a></li>
+	<li class="c-list"><a href="javascript:;">5</a></li>
+	<li class="c-list"><a href="javascript:;">6</a></li>
+	<li class="c-list"><a href="javascript:;">7</a></li>
+	<li class="c-list"><a href="javascript:;">8</a></li>
+	<li class="c-list"><a href="javascript:;">9</a></li>
+	<li id="next"><a href="javascript:;">&raquo;</a></li>
+	<li id="last"><a href="javascript:;">Last</a></li>
+</ul>
+```
+Then,you can use **my.bind()** to use them as Chpage functions.
+
+``` javascript
+my.bind('.c-list','click',function(i){
+		this.goto(i);
+});
+
+my.bind('#first','click,function(i){
+		this.goto(0);
+});
+
+my.bind('#last','click,function(i){
+		this.goEnd();
+});
+```
+In method **my.bind(selector,event,callback)** ,if you load in selector more than two elements,you can use param **i** in callback which is the index of the elements list.
