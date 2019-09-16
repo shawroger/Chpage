@@ -29,7 +29,7 @@
 <br/>
 <ul class="pagination">
 	<li id="first"><a href="javascript:;">首</a></li>
-	<li onclick="my.move('-')"><a href="javascript:;">&laquo;</a></li>
+	<li onclick="my.move(-1)"><a href="javascript:;">&laquo;</a></li>
 	<li class="c-list"><a href="javascript:;">1</a></li>
 	<li class="c-list"><a href="javascript:;">2</a></li>
 	<li class="c-list"><a href="javascript:;">3</a></li>
@@ -39,7 +39,7 @@
 	<li class="c-list"><a href="javascript:;">7</a></li>
 	<li class="c-list"><a href="javascript:;">8</a></li>
 	<li class="c-list"><a href="javascript:;">9</a></li>
-	<li onclick="my.move('+')"><a href="javascript:;">&raquo;</a></li>
+	<li onclick="my.move(1)"><a href="javascript:;">&raquo;</a></li>
 	<li id="last"><a href="javascript:;">末</a></li>
 </ul>
 </center>
@@ -63,11 +63,11 @@
 	});
 
     my.keydown(37,function(){
-    	this.move('-');
+    	this.move(-1);
     });
 
     my.keydown(39,function(){
-    	this.move('+');
+    	this.move(1);
     });
 	
 </script>
