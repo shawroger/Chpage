@@ -30,7 +30,7 @@
 
     self.mask=function(page=0){ 
     	if(typeof page!=="number"){
-    		console.error('param must be a number);
+    		console.error('param must be a number');
     		return false;
 	}
     	if(Math.floor(page)!==page){
