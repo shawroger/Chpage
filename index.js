@@ -77,19 +77,13 @@
     	}
     };
 
-    self.move=function(command='+'){
-    	switch(command){
-    		case '+':
-    			this.page++;
-    			this.mask(this.page);
-    			break;
-    		case '-':
-    			this.page--;
-    			this.mask(this.page);
-    			break;
-    		default:
-    			console.error('invaild command');
-    	}
+    self.move=function(command){
+        if(typeof command==="number"){
+            this.page=this.page+command;
+            this.mask(this.page);
+        }else{
+            console.error('invaild command');
+        }
     };
 
 
