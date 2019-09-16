@@ -53,7 +53,7 @@ my.move(-1) //pageup
 my.move(n/-n) //pageup or pagedown n pages
 my.goto(0) //go to the firt page
 my.goto(n) //go to the n.th page
-my.goEnd(n) //go to the last page
+my.goEnd() //go to the last page
 ```
 you need not worry about turning the page excessively，**Chpage** has already control it from 0 to the last page.
 
@@ -112,11 +112,11 @@ It is similar to the **my.bind()** method.
 ``` javascript
 // listen '<-' keydown event
 my.keydown(37,function(){
-	this.move('-');
+	this.move(-1);
 });
 // listen '->' keydown event
 my.keydown(39,function(){
-	this.move('+');
+	this.move(1);
 });
 ```
 ## loop method
