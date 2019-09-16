@@ -29,16 +29,10 @@
 
 
     self.mask=function(page=0){ 
-    	if(typeof page!=="number" && page!=='+' && page!=='-'){
-    		console.error('param must be a number or +/-');
+    	if(typeof page!=="number"){
+    		console.error('param must be a number);
     		return false;
-    	}
-    	if(page==='+'){
-    		page=++this.page;
-    	} 
-    	if(page==='-'){
-    		page=--this.page;
-    	} 
+	}
     	if(Math.floor(page)!==page){
     		console.error('param must be an integer');
     		page=Math.floor(page);
@@ -101,7 +95,7 @@
     			if(that.running.page%that.length===0){
     				that.mask(0);
     			}else{
-    				that.move('+');
+    				that.move(1);
     			}
     			
     		},this.running.time);
