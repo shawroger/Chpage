@@ -1,174 +1,203 @@
-(function(global,factory){   
-    if(typeof define==='function'){
+/*
+    Chpage : change page easily
+    Author : shawroger
+    it is light to use ^_^
+*/
+(function(global,factory) {   
+    if (typeof define ==='function') {
         define(function(){
-            return (global.Chpage=factory());
+            return (global.Chpage = factory());
         });
     }
-    else if(typeof exports==='object'){
-        module.exports=factory();
+    else if (typeof exports === 'object') {
+        module.exports = factory();
     }
-    else{
-        global.Chpage=factory();
+    else {
+        global.Chpage = factory();
     }
-}(this,function(){
+} (this, function () {
+
     'use strict';
 
-    let self={}; 
-    self.page=0;
-    self.auto=true;
-    self.mode=[0];
-	self.version='2.2.0';
+    //define this object
+    var self = {}; 
 
-    self.bind=function(selector,action,command){
-    	let el=document.querySelectorAll(selector);
-        for(let i=0;i<el.length;i++){
-        	el[i].addEventListener(action,command.bind(this,i));
-        }
-        
+    //store the keydown events 
+    self.key = [];
+
+    //init the first page 
+    self.page = 0;
+
+    //render mode
+    self.mode = [0];
+
+    //automatic running
+    self.auto = true;  
+
+    //verison  
+    self.version = '3.0.0';
+
+
+    //bind an element or list of elements used as a page
+    self.bind = function (selector, event, callback) {
+        var el = document.querySelectorAll(selector);
+        for (var i = 0; i < el.length; i++) {
+            el[i].addEventListener(event, callback.bind(this, i));
+        }       
     }; 
 
 
-    self.mask=function(page=0){ 
-    	if(typeof page!=="number"){
-    		console.error('param must be a number');
-    		return false;
-	}
-    	if(Math.floor(page)!==page){
-    		console.error('param must be an integer');
-    		page=Math.floor(page);
-    	}
-    	if(page<0){
-    		console.error('param must be a positive number');
-    		page=0;
-    	}	
-    	if(page>=this.length){
-    		console.error('param is too large');
-    		page=this.length-1;
-    	}  
+    //goto any page
+    self.goto = function (page = 0) { 
 
-    	this.page=page;
-    	if(this.running.flowing){
-    		this.running.page=page;
-    	}
-    	let list=this.list;
+        if (typeof page !== "number") {
+            console.error('param must be a number');
+            return false;
+        }
+
+        if (Math.floor(page) !== page) {
+            console.error('param must be an integer');
+            page = Math.floor(page);
+        }
+
+        if (page < 0) {
+            page=0;
+        }   
+        if (page >= this.length) {
+            page = this.length-1;
+        }  
+        if (this.running.flow) {
+            this.running.page = page;
+        }
+
+        //change the pointer (this.page)
+        this.page = page;
 
         /* main function */
 
-    	for(let i=0;i<list.length;i++){  		
-    		if(this.mode.includes(parseInt(i-page))){
-    			list[i].style.display="block";
-    		}else{
-                list[i].style.display="none";
+        for (var i = 0; i < this.list.length; i++) {         
+            if (this.mode.includes(parseInt(i-page) )) {
+                this.list[i].style.display = "block";
+            } else {
+                this.list[i].style.display = "none";
             }
-    	}
+        }
     };
 
-    self.match=function(selector){
-    	this.list=document.querySelectorAll(selector);
-    	this.length=this.list.length;
-    	if(this.auto){
-    		this.mask();
-    	}
+    //get the node list
+    self.match = function (selector) {
+        this.list = document.querySelectorAll(selector);
+        this.length = this.list.length;
+        if (this.auto) {
+            this.goto(0);
+        }
     };
 
-    self.move=function(command){
-        if(typeof command==="number"){
-            this.page=this.page+command;
-            this.mask(this.page);
-        }else{
+    //pageup or pagedown
+    self.move = function (command) {
+        if (typeof command === "number") {
+            this.page = this.page + command;
+            this.goto(this.page);
+        } else {
             console.error('invaild command');
         }
     };
 
-
-    self.running={status:true,time:1000,round:true,flowing:true};
-
-    self.run=function(){
-    	if(this.running.status===false){
-    		console.log('page running system stopped');
-    		return false;
-    	}
-    	let that=this;
-    	if(this.running.round===false){
-    		this.running.timer=setInterval(function(){
-    			that.running.page++;
-    			if(that.running.page%that.length===0){
-    				that.mask(0);
-    			}else{
-    				that.move(1);
-    			}
-    			
-    		},this.running.time);
-    	}else{
-    		let roundStatus=1;
-    		this.running.timer=setInterval(function(){
-    			if(that.running.page===0){
-    				roundStatus=1;
-    			}   			
-    			if(that.running.page===that.length-1){
-    				roundStatus=-1;
-    			}   			
-    			if(that.running.page<=that.length-1){
-    				that.running.page=that.running.page+roundStatus;
-    				that.mask(that.running.page);
-    			}
-    			
-    		},this.running.time);
-    	}
-   		
+    //config running system
+    self.running = {
+        step: 1,
+        flow: true,       
+        time: 1000,
+        round: true,
+        status: true,             
     };
 
-    self.stop=function(){
-        this.running.status=false;
-    	clearInterval(this.running.timer);
+
+    self.run = function () {
+
+        this.running.status = true;
+
+        if(this.running.round) {
+            //set an interval function
+            this.running.timer = setInterval( () => {
+                if(this.running.page === 0){
+                    this.running.step = Math.abs(this.running.step);
+                }               
+                if(this.running.page === this.length-1) {
+                    this.running.step = -1 * this.running.step;
+                }               
+                if(this.running.page <= this.length-1) {
+                    this.running.page = this.running.page + this.running.step;
+                    this.goto(this.running.page);
+                }
+                
+            }, this.running.time);
+        } else {
+
+            //set an interval function
+            this.running.timer=setInterval( () => {
+                this.running.page = this.running.page + this.running.step;
+                if(this.running.page >= this.length) {
+                    this.running.page = 0;
+                    this.goto(0);
+                } else {
+                    this.goto(this.running.page);
+                }
+                
+            }, this.running.time);
+        }
+        
     };
 
-    self.config=function(time=this.running.time,round=this.running.round,flowing=this.running.flowing){
-        this.running.config=this.config.bind(this);
-    	this.running.page=this.page;
-    	this.running.time=time;
-    	this.running.flowing=flowing;
-    	this.running.round=round;
-        this.running.status=true;
-    	if(this.auto){
-    		this.run();
-    	}
-    	
+    //stop the interval function
+    self.stop = function () {
+        this.running.status = false;
+        clearInterval(this.running.timer);
     };
 
-    self.new=function(){   
+    self.loop = function (
+        time = this.running.time, 
+        round = this.running.round, 
+        flow = this.running.flow, 
+        step = this.running.step 
+    ) {
+
+        this.running.time = time;        
+        this.running.round = round;
+        this.running.step = Math.floor(step);
+
+        this.running.status = true;
+
+        if (this.auto) {
+            this.run();
+        }
+        
+    };
+
+    self.new = function() {   
         return Object.assign({},this);
     };
 
 
-    self.keydown=function(key,command){
-        let that=this; 
-        let _key={
+    self.keydown = function(key, callback){ 
+        var _key={
             code: key,
-            method: command
+            method: callback
         };      
-        this.keyCode.push(key);
-        this.keyMethod.push(_key);
-        document.onkeydown=function(e){
-            if(that.keyCode.includes(e.keyCode)){
-                for(let i in that.keyMethod){
-                    if(that.keyMethod[i].code===e.keyCode){
-                        that.keyMethod[i].method.call(that);
-                    }
+        this.key.push(_key);
+        document.onkeydown = (el) => {
+            for (var i in this.key) {
+                if (this.key[i].code === el.keyCode) {
+                    this.key[i].method.call(this);
                 }
             }
         };
 
     };
 
-    self.goEnd=function(){
+    self.goEnd = function() {
         this.goto(this.length-1);
-    }
-
-    self.goto=self.mask;
-    self.loop=self.config;   
-    self.keyMethod=[];
-    self.keyCode=[];
+    };
     
     return self;
 }));
