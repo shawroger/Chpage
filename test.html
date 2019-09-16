@@ -1,0 +1,74 @@
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>app test</title>
+<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">  
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+	.c-page {
+		font-size: 180px
+	}
+</style>
+</head>
+<body>
+<br/><br/><br/>
+
+<center>
+<div class="c-page">1</div>
+<div class="c-page">2</div>
+<div class="c-page">3</div>
+<div class="c-page">4</div>
+<div class="c-page">5</div>
+<div class="c-page">6</div>
+<div class="c-page">7</div>
+<div class="c-page">8</div>
+<div class="c-page">9</div>
+
+<br/>
+<ul class="pagination">
+	<li id="first"><a href="javascript:;">首</a></li>
+	<li onclick="my.move('-')"><a href="javascript:;">&laquo;</a></li>
+	<li class="c-list"><a href="javascript:;">1</a></li>
+	<li class="c-list"><a href="javascript:;">2</a></li>
+	<li class="c-list"><a href="javascript:;">3</a></li>
+	<li class="c-list"><a href="javascript:;">4</a></li>
+	<li class="c-list"><a href="javascript:;">5</a></li>
+	<li class="c-list"><a href="javascript:;">6</a></li>
+	<li class="c-list"><a href="javascript:;">7</a></li>
+	<li class="c-list"><a href="javascript:;">8</a></li>
+	<li class="c-list"><a href="javascript:;">9</a></li>
+	<li onclick="my.move('+')"><a href="javascript:;">&raquo;</a></li>
+	<li id="last"><a href="javascript:;">末</a></li>
+</ul>
+</center>
+
+</body>
+
+<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript">
+	let my=Chpage.new();
+	my.match('.c-page');
+	my.bind('.c-list','mouseenter',function(i){
+		this.goto(i);
+	});
+
+	my.bind('#first','mouseenter',function(i){
+		this.goto(0);
+	});
+
+	my.bind('#last','mouseenter',function(i){
+		this.goEnd();
+	});
+
+    my.keydown(37,function(){
+    	this.move('-');
+    });
+
+    my.keydown(39,function(){
+    	this.move('+');
+    });
+	
+</script>
+</html>
