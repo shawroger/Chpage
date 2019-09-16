@@ -81,15 +81,45 @@ Then,you can use **my.bind()** to use them as Chpage functions.
 
 ``` javascript
 my.bind('.c-list','click',function(i){
-		this.goto(i);
+	this.goto(i);
 });
 
 my.bind('#first','click,function(i){
-		this.goto(0);
+	this.goto(0);
 });
 
 my.bind('#last','click,function(i){
-		this.goEnd();
+	this.goEnd();
 });
 ```
-In method **my.bind(selector,event,callback)** ,if you load in selector more than two elements,you can use param **i** in callback which is the index of the elements list.
+In method **my.bind(selector,event,callback)** ,
+if you load in selector more than two elements,
+you can use param **i** in callback which is the index of the elements list.
+
+## keydown event
+
+It is similar to the **my.bind()** method.
+
+``` javascript
+// listen '<-' keydown event
+my.keydown(37,function(){
+	this.move('-');
+});
+// listen '->' keydown event
+my.keydown(39,function(){
+	this.move('+');
+});
+```
+## loop method
+
+``` javascript
+my.loop(TIME,RETURN,FLOWING);
+/* 
+TIME is the time interval
+RETURN means true , so the page will go from 0 to last and back the last to 0.
+FLOWING means true , so the page will change with other events.
+*/
+
+my.stop() //stop loop function
+my.loop() //continue loop function,the params has been stored in 'my.running' object.
+```
