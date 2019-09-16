@@ -48,8 +48,9 @@ console.log(my.list); //view all the node list
 ```
 There are some methods to change pages.
 ``` javascript
-my.move('+') //pagedown
-my.move('-') //pageup
+my.move(1) //pagedown
+my.move(-1) //pageup
+my.move(n/-n) //pageup or pagedown n pages
 my.goto(0) //go to the firt page
 my.goto(n) //go to the n.th page
 my.goEnd(n) //go to the last page
@@ -90,6 +91,14 @@ my.bind('#first','click,function(i){
 
 my.bind('#last','click,function(i){
 	this.goEnd();
+});
+
+my.bind('#back','click,function(i){
+	this.move(-1);
+});
+
+my.bind('#next','click,function(i){
+	this.move(1);
 });
 ```
 In method **my.bind(selector,event,callback)** ,
